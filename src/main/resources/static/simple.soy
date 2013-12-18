@@ -1,0 +1,38 @@
+{namespace stash.config.example.hook.simple}
+
+/**
+ * @param config
+ * @param? errors
+ */
+{template .formContents}
+    {call aui.form.textField}
+        {param id: 'jiraBaseURL' /}
+        {param value: $config['jiraBaseURL'] /}
+        {param labelContent}
+            {stash_i18n('stash.web.test.hook.config.label', 'Jira Base URL')}
+        {/param}
+        {param descriptionText: stash_i18n('stash.web.test.hook.config.description', 'Example: http://jira.mbet.spb.ru') /}
+        {param extraClasses: 'long' /}
+        {param errorTexts: $errors ? $errors['jiraBaseURL'] : null /}
+    {/call}
+    {call aui.form.textField}
+        {param id: 'projectKey' /}
+        {param value: $config['projectKey'] ? $config['projectKey'] : '*' /}
+        {param labelContent}
+            {stash_i18n('stash.web.test.hook.config.projectkey', 'projectKey')}
+        {/param}
+        {param descriptionText: stash_i18n('stash.web.test.hook.config.projectkey.description', 'Can contain multiple comma-separated JIRA project keys. * forces using the global commit acceptance settings') /}
+        {param extraClasses: 'long' /}
+        {param errorTexts: $errors ? $errors['projectKey'] : null /}
+    {/call}
+    {call aui.form.textField}
+        {param id: 'magicWord' /}
+        {param value: $config['magicWord'] /}
+        {param labelContent}
+            {stash_i18n('stash.web.test.hook.config.magicword', 'Magic Word')}
+        {/param}
+        {param descriptionText: 'Can contain commit message that allows push regardless of the Jira issue key' /}
+        {param extraClasses: 'long' /}
+        {param errorTexts: $errors ? $errors['projectKey'] : null /}
+    {/call}
+{/template}

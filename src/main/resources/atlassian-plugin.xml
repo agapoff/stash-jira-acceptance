@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+  <plugin-info>
+    <description>${project.description}</description>
+    <version>${project.version}</version>
+    <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    <param name="plugin-icon">images/pluginIcon.png</param>
+    <param name="plugin-logo">images/pluginLogo.png</param>
+    <!--param name="configure.url">/admin/plugins/jira-acceptance/configurePlugin.action</param-->
+  </plugin-info>
+  <!-- add our i18n resource -->
+  <resource type="i18n" name="i18n" location="jira-acceptance"/>
+  <!-- add our web resources -->
+  <web-resource key="jira-acceptance-resources" name="jira-acceptance Web Resources">
+    <dependency>com.atlassian.auiplugin:ajs</dependency>
+    <resource type="download" name="jira-acceptance.css" location="/css/jira-acceptance.css"/>
+    <resource type="download" name="jira-acceptance.js" location="/js/jira-acceptance.js"/>
+    <resource type="download" name="images/" location="/images"/>
+    <context>jira-acceptance</context>
+  </web-resource>
+  <!-- publish our component -->
+<!--
+  <component key="myPluginComponent" class="com.panbet.stash.MyPluginComponentImpl" public="true">
+    <interface>com.panbet.stash.MyPluginComponent</interface>
+  </component>
+-->
+  <!-- import from the product container -->
+  <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
+  <repository-hook name="Jira Pre Receive Hook" i18n-name-key="jira-pre-receive-hook.name" key="jira-pre-receive-hook" class="com.panbet.stash.hook.JiraPreReceiveHook">
+    <description key="jira-pre-receive-hook.description">Jira Commit Acceptance</description>
+    <icon>images/stash.png</icon>
+        <config-form name="Simple Hook Config" key="simpleHook-config">
+            <view>stash.config.example.hook.simple.formContents</view>
+            <directory location="/static/"/>
+        </config-form>
+  </repository-hook>
+</atlassian-plugin>
