@@ -1,0 +1,32 @@
+#set($descriptionHtml = "Jira connection")
+<html>
+  <head>
+    <title>Jira Acceptance settings</title>
+    <meta name="decorator" content="atl.admin" />
+    <meta name="application-base-url" content="$applicationProperties.getBaseUrl()">
+      $webResourceManager.requireResource("com.atlassian.auiplugin:ajs")
+      $webResourceManager.requireResource("com.panbet.stash.jira-acceptance:resources")
+  </head>
+  <body>
+  <header class="aui-page-header"><div class="aui-page-header-inner"><div class="aui-page-header-main"><h2>Jira Commit Acceptance Hook settings</h2></div></div></header>
+    <div id="aui-message-bar"></div>
+    <form id="admin" class="aui">
+      <p>$descriptionHtml.</p>
+	</br></br></br> 
+      <div class="field-group">    
+        <label for="url">URL</label>
+        <input type="text" id="url" name="url" class="text">
+	<div class="description">Example: http://jira.example.com</div>
+        <label for="login">Login</label>
+        <input type="text" id="login" name="login" class="text">
+        <div class="description">Username for logging into Jira</div>
+        <label for="url">Password</label>
+        <input type="password" id="password" name="password" class="text">
+        <div class="description">Password for logging into Jira</div>
+      </div>
+      <div class="field-group">
+        <input type="submit" value="Save" class="button">
+      </div>
+    </form>
+    </body>
+</html>
