@@ -6,16 +6,6 @@
  */
 {template .formContents}
     {call aui.form.textField}
-        {param id: 'jiraBaseURL' /}
-        {param value: $config['jiraBaseURL'] /}
-        {param labelContent}
-            {stash_i18n('stash.web.test.hook.config.label', 'Jira Base URL')}
-        {/param}
-        {param descriptionText: stash_i18n('stash.web.test.hook.config.description', 'Example: http://jira.mbet.spb.ru') /}
-        {param extraClasses: 'long' /}
-        {param errorTexts: $errors ? $errors['jiraBaseURL'] : null /}
-    {/call}
-    {call aui.form.textField}
         {param id: 'projectKey' /}
         {param value: $config['projectKey'] ? $config['projectKey'] : '*' /}
         {param labelContent}

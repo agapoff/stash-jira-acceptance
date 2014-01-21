@@ -12,13 +12,14 @@
   <!-- add our i18n resource -->
   <resource type="i18n" name="i18n" location="jira-acceptance"/>
   <!-- add our web resources -->
+<!--
   <web-resource key="jira-acceptance-resources" name="jira-acceptance Web Resources">
     <dependency>com.atlassian.auiplugin:ajs</dependency>
-    <resource type="download" name="jira-acceptance.css" location="/css/jira-acceptance.css"/>
-    <resource type="download" name="jira-acceptance.js" location="/js/jira-acceptance.js"/>
+    <resource type="download" name="admin.js" location="admin.js"/>
     <resource type="download" name="images/" location="/images"/>
     <context>jira-acceptance</context>
   </web-resource>
+-->
   <!-- publish our component -->
 <!--
   <component key="myPluginComponent" class="com.panbet.stash.MyPluginComponentImpl" public="true">
@@ -35,4 +36,39 @@
             <directory location="/static/"/>
         </config-form>
   </repository-hook>
+<!--  -->
+
+  <component-import key="userManager" interface="com.atlassian.sal.api.user.UserManager" />
+  <component-import key="loginUriProvider" interface="com.atlassian.sal.api.auth.LoginUriProvider" />
+  <component-import key="renderer" interface="com.atlassian.templaterenderer.velocity.one.six.VelocityTemplateRenderer" />
+  <component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
+  <component-import key="transactionTemplate" interface="com.atlassian.sal.api.transaction.TransactionTemplate" />
+
+  <template-context-item key="applicationPropertiesContextItem"
+	component-ref="applicationProperties" context-key="applicationProperties"
+	name="Application Properties Context Item" />
+
+  <servlet key="admin-servlet" class="com.panbet.stash.hook.admin.AdminServlet">
+     <url-pattern>/jira-acceptance/admin</url-pattern>
+  </servlet>
+
+  <rest key="rest" path="/jira-acceptance-admin" version="1.0">
+	<description>Provides REST resources for the Jira Acceptance admin UI.
+	</description>
+  </rest>
+
+  <web-item key="stash-menu-item" name="Jira Acceptance Admin" weight="30"
+        section="atl.admin/admin-settings-section">
+        <condition class="com.atlassian.stash.web.conditions.IsLoggedInCondition" />
+            <description>Link to the Jira Acceptance admin page.</description>
+            <label key="stash.web.menu.admin">Jira Acceptance settings</label>
+            <link linkId="jira-acceptance-admin-link">/plugins/servlet/jira-acceptance/admin</link>
+            <styleClass>recent-repositories</styleClass>
+  </web-item>
+
+  <web-resource key="resources" name="jira-acceptance Web Resources">
+    <dependency>com.atlassian.auiplugin:ajs</dependency>
+    <resource type="download" name="admin.js" location="admin.js"/>
+  </web-resource>
+<!--  -->
 </atlassian-plugin>

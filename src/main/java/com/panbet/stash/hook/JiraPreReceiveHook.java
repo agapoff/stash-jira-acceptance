@@ -19,22 +19,50 @@ import com.atlassian.stash.hook.repository.*;
 import com.atlassian.stash.repository.*;
 import java.util.Collection;
 
+import com.atlassian.sal.api.pluginsettings.PluginSettings;
+import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
+import com.atlassian.sal.api.transaction.TransactionCallback;
+import com.atlassian.sal.api.transaction.TransactionTemplate;
+
+import com.panbet.stash.hook.admin.ConfigResource.Config;
+
 public class JiraPreReceiveHook implements PreReceiveRepositoryHook, RepositorySettingsValidator
 {
 
     private static final PageRequestImpl PAGE_REQUEST = new PageRequestImpl(0, 100);
     private final HistoryService historyService;
-    public JiraPreReceiveHook(HistoryService historyService) {
+    private final PluginSettingsFactory pluginSettingsFactory;
+    private final TransactionTemplate transactionTemplate;
+    public JiraPreReceiveHook(HistoryService historyService, PluginSettingsFactory pluginSettingsFactory, TransactionTemplate transactionTemplate) {
         this.historyService = historyService;
+        this.pluginSettingsFactory = pluginSettingsFactory;
+        this.transactionTemplate = transactionTemplate;
     }
 
     @Override
     public boolean onReceive(RepositoryHookContext context, Collection<RefChange> refChanges, HookResponse hookResponse) {
         List<Changeset> badChangesets = Lists.newArrayList();
-        String url = context.getSettings().getString("jiraBaseURL");
+
+
+
+		Config globalConfig = (Config) transactionTemplate.execute(new TransactionCallback()
+		  {
+		    public Object doInTransaction()
+		    {
+		      PluginSettings settings = pluginSettingsFactory.createGlobalSettings();
+		      Config globalConfig = new Config();
+		      globalConfig.setUrl((String) settings.get(Config.class.getName() + ".url"));                 
+                      globalConfig.setLogin((String) settings.get(Config.class.getName() + ".login"));
+                      globalConfig.setPassword((String) settings.get(Config.class.getName() + ".password"));
+		      return globalConfig;
+		    }
+		  });
+
+        //String url = context.getSettings().getString("jiraBaseURL");
+	String url = globalConfig.getUrl();
         String RPC_PATH  = "/rpc/xmlrpc";
-        String jiraLogin = "myJiraLogin";
-        String jiraPassword = "myJiraPassword";
+        String jiraLogin = globalConfig.getLogin();
+        String jiraPassword = globalConfig.getPassword();
         String projectKey = context.getSettings().getString("projectKey");
 	String magicWord = context.getSettings().getString("magicWord");
 
